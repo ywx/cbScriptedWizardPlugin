@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Scripted wizard" />
+		<Option default_target="src" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Scripted wizard">
+				<Option output="devel/share/CodeBlocks/plugins/scriptedwizard" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="devel" />
+				<Option external_deps="$(#cb)/devel/libcodeblocks.a;" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option parameters="--debug-log --no-dde --no-check-associations --multiple-instance --no-splash-screen --verbose -p debug" />
+				<Option host_application="./codeblocks.exe" />
+				<Option run_host_application_in_terminal="0" />
+				<Option projectLinkerOptionsRelation="1" />
+				<Compiler>
+					<Add option="-DBUILDING_PLUGIN" />
+					<Add directory="include" />
+					<Add directory="$(#cb)/include" />
+					<Add directory="$(#cb)/include/scripting/include" />
+					<Add directory="$(#cb)/include/scripting/sqplus" />
+					<Add directory="$(#cb)/sdk/wxscintilla/include" />
+					<Add directory="$(#wx.include)" />
+					<Add directory="$(#wx.lib)/gcc_dll/mswu" />
+				</Compiler>
+				<Linker>
+					<Add option="-Wl,--enable-auto-image-base" />
+					<Add option="-Wl,--add-stdcall-alias" />
+					<Add option="-Wl,--enable-auto-import" />
+					<Add option="-Wl,--no-undefined" />
+					<Add option="-mthreads" />
+					<Add library="codeblocks" />
+					<Add library="wxmsw$(WX_VERSION)$(WX_SUFFIX)" />
+					<Add directory="$(#cb)/devel" />
+					<Add directory="$(#wx.lib)/gcc_dll" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cmd /c if not exist devel\share\CodeBlocks mkdir devel\share\CodeBlocks" />
+					<Add after="zip -jq9 devel\share\CodeBlocks\scriptedwizard.zip plugins\scriptedwizard\resources\manifest.xml" />
+					<Add after="zip -jq9 scriptedwizard.cbplugin devel\share\CodeBlocks\plugins\scriptedwizard.dll devel\share\CodeBlocks\scriptedwizard.zip" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Environment>
+				<Variable name="WX_CFG" value="" />
+				<Variable name="WX_SUFFIX" value="u" />
+				<Variable name="WX_VERSION" value="28" />
+			</Environment>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="$(#CB_RELEASE_TYPE)" />
+			<Add option="-pipe" />
+			<Add option="-mthreads" />
+			<Add option="-fmessage-length=0" />
+			<Add option="-fexceptions" />
+			<Add option="-Winvalid-pch" />
+			<Add option="-DHAVE_W32API_H" />
+			<Add option="-D__WXMSW__" />
+			<Add option="-DWXUSINGDLL" />
+			<Add option="-DcbDEBUG" />
+			<Add option="-DCB_PRECOMP" />
+			<Add option="-DWX_PRECOMP" />
+			<Add option="-DwxUSE_UNICODE" />
+			<Add directory="$(#WX.include)" />
+			<Add directory="$(#WX.lib)/gcc_dll$(WX_CFG)/msw$(WX_SUFFIX)" />
+			<Add directory="$(#cb)/sdk/wxscintilla/include" />
+			<Add directory="$(#cb)/sdk/wxpropgrid/include" />
+			<Add directory="$(#cb)/include/tinyxml" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="$(#WX.include)" />
+			<Add directory="$(#WX)/lib/gcc_dll$(WX_CFG)/msw$(WX_SUFFIX)" />
+		</ResourceCompiler>
+		<Linker>
+			<Add library="wxmsw$(WX_VERSION)$(WX_SUFFIX)" />
+			<Add directory="$(#cb)/base/tinyxml" />
+			<Add directory="$(#WX.lib)/gcc_dll$(WX_CFG)" />
+		</Linker>
+		<Unit filename="plugins/scriptedwizard/buildtargetpanel.cpp" />
+		<Unit filename="plugins/scriptedwizard/buildtargetpanel.h" />
+		<Unit filename="plugins/scriptedwizard/compilerpanel.cpp" />
+		<Unit filename="plugins/scriptedwizard/compilerpanel.h" />
+		<Unit filename="plugins/scriptedwizard/filepathpanel.cpp" />
+		<Unit filename="plugins/scriptedwizard/filepathpanel.h" />
+		<Unit filename="plugins/scriptedwizard/genericselectpath.cpp" />
+		<Unit filename="plugins/scriptedwizard/genericselectpath.h" />
+		<Unit filename="plugins/scriptedwizard/genericsinglechoicelist.cpp" />
+		<Unit filename="plugins/scriptedwizard/genericsinglechoicelist.h" />
+		<Unit filename="plugins/scriptedwizard/infopanel.cpp" />
+		<Unit filename="plugins/scriptedwizard/infopanel.h" />
+		<Unit filename="plugins/scriptedwizard/projectpathpanel.cpp" />
+		<Unit filename="plugins/scriptedwizard/projectpathpanel.h" />
+		<Unit filename="plugins/scriptedwizard/resources/manifest.xml" />
+		<Unit filename="plugins/scriptedwizard/wiz.cpp" />
+		<Unit filename="plugins/scriptedwizard/wiz.h" />
+		<Unit filename="plugins/scriptedwizard/wizpage.cpp" />
+		<Unit filename="plugins/scriptedwizard/wizpage.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<wxsmith version="1">
+				<resources>
+					<wxScrollingDialog wxs="wxsmith/VirtualBuildTargetsDlg.wxs" src="sdk/virtualbuildtargetsdlg.cpp" hdr="include/virtualbuildtargetsdlg.h" xrc="sdk/resources/virtualbuildtargetsdlg.xrc" fwddecl="0" i18n="1" name="VirtualBuildTargetsDlg" language="CPP" />
+					<wxScrollingDialog wxs="wxsmith/databreakpointdlg.wxs" src="plugins/debuggergdb/databreakpointdlg.cpp" hdr="plugins/debuggergdb/databreakpointdlg.h" fwddecl="0" i18n="1" name="DataBreakpointDlg" language="CPP" />
+					<wxScrollingDialog wxs="wxsmith/CCDebugInfo.wxs" src="plugins/codecompletion/parser/ccdebuginfo.cpp" hdr="plugins/codecompletion/parser/ccdebuginfo.h" fwddecl="0" i18n="1" name="CCDebugInfo" language="CPP" />
+					<wxPanel wxs="wxsmith/ScriptConsole.wxs" src="src/scriptconsole.cpp" hdr="src/scriptconsole.h" fwddecl="0" i18n="1" name="ScriptConsole" language="CPP" />
+					<wxPanel wxs="wxsmith/BuildTargetPanel.wxs" src="plugins/scriptedwizard/buildtargetpanel.cpp" hdr="plugins/scriptedwizard/buildtargetpanel.h" fwddecl="0" i18n="1" name="BuildTargetPanel" language="CPP" />
+					<wxPanel wxs="wxsmith/CompilerPanel.wxs" src="plugins/scriptedwizard/compilerpanel.cpp" hdr="plugins/scriptedwizard/compilerpanel.h" fwddecl="0" i18n="1" name="CompilerPanel" language="CPP" />
+					<wxPanel wxs="wxsmith/FilePathPanel.wxs" src="plugins/scriptedwizard/filepathpanel.cpp" hdr="plugins/scriptedwizard/filepathpanel.h" fwddecl="0" i18n="1" name="FilePathPanel" language="CPP" />
+					<wxPanel wxs="wxsmith/GenericSelectPath.wxs" src="plugins/scriptedwizard/genericselectpath.cpp" hdr="plugins/scriptedwizard/genericselectpath.h" fwddecl="0" i18n="1" name="GenericSelectPath" language="CPP" />
+					<wxPanel wxs="wxsmith/GenericSingleChoiceList.wxs" src="plugins/scriptedwizard/genericsinglechoicelist.cpp" hdr="plugins/scriptedwizard/genericsinglechoicelist.h" fwddecl="0" i18n="1" name="GenericSingleChoiceList" language="CPP" />
+					<wxPanel wxs="wxsmith/InfoPanel.wxs" src="plugins/scriptedwizard/infopanel.cpp" hdr="plugins/scriptedwizard/infopanel.h" fwddecl="0" i18n="1" name="InfoPanel" language="CPP" />
+					<wxPanel wxs="wxsmith/ProjectPathPanel.wxs" src="plugins/scriptedwizard/projectpathpanel.cpp" hdr="plugins/scriptedwizard/projectpathpanel.h" fwddecl="0" i18n="1" name="ProjectPathPanel" language="CPP" />
+					<wxPanel wxs="wxsmith/EmbeddedHtmlPanel.wxs" src="plugins/defaultmimehandler/EmbeddedHtmlPanel.cpp" hdr="plugins/defaultmimehandler/EmbeddedHtmlPanel.h" fwddecl="1" i18n="1" name="EmbeddedHtmlPanel" language="CPP" />
+					<wxScrollingDialog wxs="wxsmith/debuggersettingsdlg.wxs" src="src/debuggersettingsdlg.cpp" hdr="src/debuggersettingsdlg.h" fwddecl="0" i18n="1" name="DebuggerSettingsDlg" language="CPP" />
+					<wxPanel wxs="wxsmith/debuggersettingspanel.wxs" src="src/debuggersettingspanel.cpp" hdr="src/debuggersettingspanel.h" fwddecl="0" i18n="1" name="DebuggerSettingsPanel" language="CPP" />
+					<wxPanel wxs="wxsmith/debuggersettingscommonpanel.wxs" src="src/debuggersettingscommonpanel.cpp" hdr="src/debuggersettingscommonpanel.h" fwddecl="0" i18n="1" name="DebuggerSettingsCommonPanel" language="CPP" />
+				</resources>
+			</wxsmith>
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
