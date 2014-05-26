@@ -88,6 +88,8 @@ class Wiz : public cbWizardPlugin
         bool IsCheckboxChecked(const wxString& name);
 
         void FillComboboxWithCompilers(const wxString& name);
+        void FillComboListboxWithSelCompilers( const wxString& name, const wxString& validCompilerIDs );
+        void AppendComboListboxWithSelCompilers( const wxString& name, const wxString& validCompilerIDs );
         wxString GetCompilerFromCombobox(const wxString& name);
 
         wxString GetComboboxStringSelection(const wxString& name);
@@ -154,6 +156,10 @@ class Wiz : public cbWizardPlugin
                                         const wxString& releaseName,
                                         const wxString& releaseOut,
                                         const wxString& releaseObjOut);
+
+        // extender
+        int       FillComboListboxWithChoices( const wxString& name, const wxString& choices );
+        int       AppendComboListboxWithChoices( const wxString& name, const wxString& choices );
 
         // pre-defined pages
         void AddInfoPage(const wxString& pageId, const wxString& intro_msg);

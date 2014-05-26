@@ -833,6 +833,78 @@ void Wiz::FillComboboxWithCompilers(const wxString& name)
     }
 }
 
+void Wiz::FillComboListboxWithSelCompilers( const wxString& name, const wxString& validCompilerIDs )
+{
+    wxWizardPage* page = m_pWizard->GetCurrentPage();
+    if (page)
+    {
+        wxControlWithItems* win = dynamic_cast<wxControlWithItems*>( page->FindWindowByName( name.IsEmpty() ? _T("GenericChoiceList") : name , page ) );
+        if (win)
+        {
+            wxArrayString valids = GetArrayFromString(validCompilerIDs, _T(";"), true);
+            win->Clear();
+            for (size_t i = 0; i < CompilerFactory::GetCompilersCount(); ++i)
+            {
+                Compiler* compiler = CompilerFactory::GetCompiler(i);
+                if (compiler)
+                {
+                    for (size_t n = 0; n < valids.GetCount(); ++n)
+                    {
+                        // match not only if IDs match, but if ID inherits from it too
+                        if (CompilerFactory::CompilerInheritsFrom(compiler, valids[n]))
+                        {
+                            win->Append(compiler->GetName());
+                            break;
+                        }
+                    }
+                }
+            }
+            Compiler* compiler = CompilerFactory::GetDefaultCompiler();
+            if (compiler)
+                win->SetSelection(win->FindString(compiler->GetName()));
+        }
+    }
+}
+
+void Wiz::AppendComboListboxWithSelCompilers( const wxString& name, const wxString& validCompilerIDs )
+{
+    wxWizardPage* page = m_pWizard->GetCurrentPage();
+    if (page)
+    {
+        wxControlWithItems* win = dynamic_cast<wxControlWithItems*>( page->FindWindowByName( name.IsEmpty() ? _T("GenericChoiceList") : name , page ) );
+        if (win)
+        {
+            wxArrayString valids = GetArrayFromString(validCompilerIDs, _T(";"), true);
+            size_t iItemsCount = win->GetCount();
+            wxString nameInItems = _T(";");
+            for( size_t i = 0; i < iItemsCount; ++i )
+            {
+                nameInItems += win->GetString(i) + _T(";");
+            }
+            for (size_t i = 0; i < CompilerFactory::GetCompilersCount(); ++i)
+            {
+                Compiler* compiler = CompilerFactory::GetCompiler(i);
+                if (compiler)
+                {
+                    wxString compilerName = compiler->GetName();
+                    if( wxNOT_FOUND != nameInItems.Find( _T(";") + compilerName + _T(";") ) )
+                        continue;
+                    for (size_t n = 0; n < valids.GetCount(); ++n)
+                    {
+                        // match not only if IDs match, but if ID inherits from it too
+                        if (CompilerFactory::CompilerInheritsFrom(compiler, valids[n]))
+                        {
+                            win->Append( compilerName );
+                            nameInItems += compilerName + _T(";");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void Wiz::EnableWindow(const wxString& name, bool enable)
 {
     wxWizardPage* page = m_pWizard->GetCurrentPage();
@@ -1466,6 +1538,61 @@ void Wiz::SetReleaseTargetDefaults(bool wantRelease,
     m_ReleaseObjOutputDir = releaseObjOut;
 }
 
+
+int Wiz::FillComboListboxWithChoices( const wxString& name, const wxString& choices )
+{
+    wxWizardPage* page = m_pWizard->GetCurrentPage();
+    if (page)
+    {
+        wxControlWithItems* win = dynamic_cast<wxControlWithItems*>( page->FindWindowByName( name.IsEmpty() ? _T("GenericChoiceList") : name , page ) );
+        if (win)
+        {
+            win->Clear();
+            wxArrayString items = GetArrayFromString( choices, _T(";") );
+            unsigned int nItems = items.GetCount();
+            for ( unsigned int i = 0; i < nItems; i++ )
+            {
+                win->Append( items[i] );
+            }
+
+            return 0;
+        }
+    }
+    return -1;
+}
+
+int Wiz::AppendComboListboxWithChoices( const wxString& name, const wxString& choices )
+{
+    wxWizardPage* page = m_pWizard->GetCurrentPage();
+    if (page)
+    {
+        wxControlWithItems* win = dynamic_cast<wxControlWithItems*>( page->FindWindowByName( name.IsEmpty() ? _T("GenericChoiceList") : name , page ) );
+        if (win)
+        {
+            wxArrayString items = GetArrayFromString( choices, _T(";") );
+            size_t iItemsCount = win->GetCount();
+            wxString nameInItems = _T(";");
+            for( size_t i = 0; i < iItemsCount; ++i )
+            {
+                nameInItems += win->GetString(i) + _T(";");
+            }
+            unsigned int nItems = items.GetCount();
+            for ( unsigned int i = 0; i < nItems; i++ )
+            {
+                wxString tItemsName = items[i];
+                if( wxNOT_FOUND != nameInItems.Find( _T(";") + tItemsName + _T(";") ) )
+                    continue;
+                win->Append( tItemsName );
+                nameInItems += tItemsName + _T(";");
+            }
+
+            return 0;
+        }
+    }
+    return -1;
+}
+
+
 void Wiz::RegisterWizard()
 {
     SqPlus::SQClassDef<Wiz>("Wiz").
@@ -1538,7 +1665,13 @@ void Wiz::RegisterWizard()
             func(&Wiz::GetFileHeaderGuard, "GetFileHeaderGuard").
             func(&Wiz::GetFileAddToProject, "GetFileAddToProject").
             func(&Wiz::GetFileTargetIndex, "GetFileTargetIndex").
-            func(&Wiz::SetFilePathSelectionFilter, "SetFilePathSelectionFilter");
+            func(&Wiz::SetFilePathSelectionFilter, "SetFilePathSelectionFilter").
+
+            // extender
+            func(&Wiz::FillComboListboxWithSelCompilers, "FillComboListboxWithSelCompilers").
+            func(&Wiz::AppendComboListboxWithSelCompilers, "AppendComboListboxWithSelCompilers").
+            func(&Wiz::FillComboListboxWithChoices, "FillComboListboxWithChoices").
+            func(&Wiz::AppendComboListboxWithChoices, "AppendComboListboxWithChoices");
 
     SqPlus::BindVariable(this, "Wizard", SqPlus::VAR_ACCESS_READ_ONLY);
 }
