@@ -160,6 +160,7 @@ class Wiz : public cbWizardPlugin
         // extender
         int       FillComboListboxWithChoices( const wxString& name, const wxString& choices );
         int       AppendComboListboxWithChoices( const wxString& name, const wxString& choices );
+        wxString  GetWizardScriptFolder(void);
 
         // pre-defined pages
         void AddInfoPage(const wxString& pageId, const wxString& intro_msg);
@@ -201,6 +202,8 @@ class Wiz : public cbWizardPlugin
         wxString m_ReleaseName;
         wxString m_ReleaseOutputDir;
         wxString m_ReleaseObjOutputDir;
+
+        wxString m_WizardScriptFolder;
 	private:
         Wiz(cb_unused const Wiz& rhs); // prevent copy construction
 };

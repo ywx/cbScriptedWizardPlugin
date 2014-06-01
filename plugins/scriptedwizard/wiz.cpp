@@ -267,6 +267,8 @@ CompileTargetBase* Wiz::Launch(int index, wxString* pFilename)
         InfoWindow::Display(_("Error"), _("Failed to load the wizard's script.\nPlease check the debug log for details..."));
         return 0;
     }
+    m_WizardScriptFolder = script.BeforeLast( _T('/') );
+    m_WizardScriptFolder = m_WizardScriptFolder.AfterLast( _T('/') );
 
     // call BeginWizard()
     try
@@ -1592,6 +1594,11 @@ int Wiz::AppendComboListboxWithChoices( const wxString& name, const wxString& ch
     return -1;
 }
 
+wxString Wiz::GetWizardScriptFolder(void)
+{
+    return m_WizardScriptFolder;
+}
+
 
 void Wiz::RegisterWizard()
 {
@@ -1671,7 +1678,8 @@ void Wiz::RegisterWizard()
             func(&Wiz::FillComboListboxWithSelCompilers, "FillComboListboxWithSelCompilers").
             func(&Wiz::AppendComboListboxWithSelCompilers, "AppendComboListboxWithSelCompilers").
             func(&Wiz::FillComboListboxWithChoices, "FillComboListboxWithChoices").
-            func(&Wiz::AppendComboListboxWithChoices, "AppendComboListboxWithChoices");
+            func(&Wiz::AppendComboListboxWithChoices, "AppendComboListboxWithChoices").
+            func(&Wiz::GetWizardScriptFolder, "GetWizardScriptFolder");
 
     SqPlus::BindVariable(this, "Wizard", SqPlus::VAR_ACCESS_READ_ONLY);
 }
