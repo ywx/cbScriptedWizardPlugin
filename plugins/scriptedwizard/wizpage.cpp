@@ -2,13 +2,14 @@
  * This file is part of the Code::Blocks IDE and licensed under the GNU General Public License, version 3
  * http://www.gnu.org/licenses/gpl-3.0.html
  *
- * $Revision: 8541 $
- * $Id: wizpage.cpp 8541 2012-11-10 18:37:28Z thomasdenk $
- * $HeadURL: http://svn.code.sf.net/p/codeblocks/code/branches/release-xx.yy/src/plugins/scriptedwizard/wizpage.cpp $
+ * $Revision: 9832 $
+ * $Id: wizpage.cpp 9832 2014-06-25 00:31:36Z fuscated $
+ * $HeadURL: http://svn.code.sf.net/p/codeblocks/code/branches/release-16.xx/src/plugins/scriptedwizard/wizpage.cpp $
  */
 
 #include <sdk.h>
 #ifndef CB_PRECOMP
+    #include <wx/ctrlsub.h>
     #include <manager.h>
     #include <logmanager.h>
     #include <configmanager.h>
@@ -31,6 +32,41 @@
 #include "filepathpanel.h"
 #include "genericselectpath.h"
 #include "genericsinglechoicelist.h"
+
+namespace Wizard {
+
+void FillCompilerControl(wxItemContainer *control, const wxString& compilerID, const wxString& validCompilerIDs)
+{
+    const wxArrayString &valids = GetArrayFromString(validCompilerIDs, _T(";"), true);
+    wxString def = compilerID;
+    if (def.IsEmpty())
+        def = CompilerFactory::GetDefaultCompilerID();
+    int id = 0;
+    control->Clear();
+    for (size_t i = 0; i < CompilerFactory::GetCompilersCount(); ++i)
+    {
+        Compiler* compiler = CompilerFactory::GetCompiler(i);
+        if (compiler)
+        {
+            for (size_t n = 0; n < valids.GetCount(); ++n)
+            {
+                // match not only if IDs match, but if ID inherits from it too
+                if (CompilerFactory::CompilerInheritsFrom(compiler, valids[n]))
+                {
+                    control->Append(compiler->GetName());
+                    if (compiler->GetID().IsSameAs(def))
+                        id = control->GetCount() < 1 ? 0 : (control->GetCount() - 1);
+                    break;
+                }
+            }
+        }
+    }
+    control->SetSelection(id);
+}
+
+} // namespace Wizard
+
+using namespace Wizard;
 
 // utility function to append a path separator to the
 // string parameter, if needed.
@@ -460,33 +496,10 @@ WizCompilerPanel::WizCompilerPanel(const wxString& compilerID, const wxString& v
 {
     m_pCompilerPanel = new CompilerPanel(this, GetParent());
 
-    wxArrayString valids = GetArrayFromString(validCompilerIDs, _T(";"), true);
-    wxString def = compilerID;
-    if (def.IsEmpty())
-        def = CompilerFactory::GetDefaultCompilerID();
-    int id = 0;
     wxComboBox* cmb = m_pCompilerPanel->GetCompilerCombo();
-    cmb->Clear();
-    for (size_t i = 0; i < CompilerFactory::GetCompilersCount(); ++i)
-    {
-        Compiler* compiler = CompilerFactory::GetCompiler(i);
-        if (compiler)
-        {
-            for (size_t n = 0; n < valids.GetCount(); ++n)
-            {
-                // match not only if IDs match, but if ID inherits from it too
-                if (CompilerFactory::CompilerInheritsFrom(compiler, valids[n]))
-                {
-                    cmb->Append(compiler->GetName());
-                    if (compiler->GetID().IsSameAs(def))
-                        id = cmb->GetCount() < 1 ? 0 : (cmb->GetCount() - 1);
-                    break;
-                }
-            }
-        }
-    }
-    cmb->SetSelection(id);
+    FillCompilerControl(cmb, compilerID, validCompilerIDs);
     cmb->Enable(allowCompilerChange);
+
     m_pCompilerPanel->EnableConfigurationTargets(m_AllowConfigChange);
 
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("scripts"));
@@ -618,31 +631,8 @@ WizBuildTargetPanel::WizBuildTargetPanel(const wxString& targetName, bool isDebu
 
     if (showCompiler)
     {
-        wxArrayString valids = GetArrayFromString(validCompilerIDs, _T(";"), true);
-        wxString def = compilerID;
-        if (def.IsEmpty())
-            def = CompilerFactory::GetDefaultCompiler()->GetName();
-        int id = 0;
         wxComboBox* cmb = m_pBuildTargetPanel->GetCompilerCombo();
-        cmb->Clear();
-        for (size_t i = 0; i < CompilerFactory::GetCompilersCount(); ++i)
-        {
-            for (size_t n = 0; n < valids.GetCount(); ++n)
-            {
-                Compiler* compiler = CompilerFactory::GetCompiler(i);
-                if (compiler)
-                {
-                    if (compiler->GetID().Matches(valids[n]))
-                    {
-                        cmb->Append(compiler->GetName());
-                        if (compiler->GetID().IsSameAs(def))
-                            id = cmb->GetCount();
-                        break;
-                    }
-                }
-            }
-        }
-        cmb->SetSelection(id);
+        FillCompilerControl(cmb, compilerID, validCompilerIDs);
         cmb->Enable(allowCompilerChange);
     }
 }

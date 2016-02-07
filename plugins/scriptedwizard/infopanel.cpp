@@ -2,15 +2,21 @@
  * This file is part of the Code::Blocks IDE and licensed under the GNU General Public License, version 3
  * http://www.gnu.org/licenses/gpl-3.0.html
  *
- * $Revision: 7109 $
- * $Id: infopanel.cpp 7109 2011-04-15 11:53:16Z mortenmacfly $
- * $HeadURL: http://svn.code.sf.net/p/codeblocks/code/branches/release-xx.yy/src/plugins/scriptedwizard/infopanel.cpp $
+ * $Revision: 10270 $
+ * $Id: infopanel.cpp 10270 2015-05-15 10:57:08Z jenslody $
+ * $HeadURL: http://svn.code.sf.net/p/codeblocks/code/branches/release-16.xx/src/plugins/scriptedwizard/infopanel.cpp $
  */
+
+#include <sdk.h>
+#ifndef CB_PRECOMP
+    //(*InternalHeadersPCH(InfoPanel)
+    #include <wx/string.h>
+    #include <wx/intl.h>
+    //*)
+#endif // CB_PRECOMP
 
 #include "infopanel.h"
 
-#include <wx/intl.h>
-#include <wx/string.h>
 
 //(*IdInit(InfoPanel)
 const long InfoPanel::ID_STATICTEXT1 = wxNewId();
@@ -28,10 +34,10 @@ InfoPanel::InfoPanel(wxWindow* parent,wxWindowID id)
 	Create(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	lblIntro = new wxStaticText(this, ID_STATICTEXT1, _("Welcome to the new console application wizard!\n\n\n\n\n\n\n\n\n\n\n\n\n\n"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE, _T("ID_STATICTEXT1"));
-	BoxSizer1->Add(lblIntro, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 8);
+	BoxSizer1->Add(lblIntro, 1, wxALL|wxEXPAND, 8);
 	chkSkip = new wxCheckBox(this, ID_CHECKBOX1, _("Skip this page next time"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	chkSkip->SetValue(false);
-	BoxSizer1->Add(chkSkip, 0, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 8);
+	BoxSizer1->Add(chkSkip, 0, wxALL|wxEXPAND, 8);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);

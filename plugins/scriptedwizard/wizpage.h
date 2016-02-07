@@ -13,6 +13,7 @@
 #include <wx/panel.h>
 #include <wx/xrc/xmlres.h>
 
+class wxItemContainer;
 class ProjectPathPanel;
 class CompilerPanel;
 class BuildTargetPanel;
@@ -23,6 +24,11 @@ class WizPageBase;
 class InfoPanel;
 
 typedef std::map<wxString, WizPageBase*> PagesByName;
+
+namespace Wizard {
+
+void FillCompilerControl(wxItemContainer *control, const wxString& compilerID, const wxString& validCompilerIDs);
+} // namespace Wizard
 
 class WizPageBase : public wxWizardPageSimple
 {

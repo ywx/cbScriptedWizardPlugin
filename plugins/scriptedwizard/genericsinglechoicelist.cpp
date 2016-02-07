@@ -2,16 +2,22 @@
  * This file is part of the Code::Blocks IDE and licensed under the GNU General Public License, version 3
  * http://www.gnu.org/licenses/gpl-3.0.html
  *
- * $Revision: 7109 $
- * $Id: genericsinglechoicelist.cpp 7109 2011-04-15 11:53:16Z mortenmacfly $
- * $HeadURL: http://svn.code.sf.net/p/codeblocks/code/branches/release-xx.yy/src/plugins/scriptedwizard/genericsinglechoicelist.cpp $
+ * $Revision: 10270 $
+ * $Id: genericsinglechoicelist.cpp 10270 2015-05-15 10:57:08Z jenslody $
+ * $HeadURL: http://svn.code.sf.net/p/codeblocks/code/branches/release-16.xx/src/plugins/scriptedwizard/genericsinglechoicelist.cpp $
  */
+
+#include <sdk.h>
+#ifndef CB_PRECOMP
+    #include <wx/arrstr.h>
+    //(*InternalHeadersPCH(GenericSingleChoiceList)
+    #include <wx/string.h>
+    #include <wx/intl.h>
+    //*)
+#endif // CB_PRECOMP
 
 #include "genericsinglechoicelist.h"
 
-#include <wx/arrstr.h>
-#include <wx/intl.h>
-#include <wx/string.h>
 
 //(*IdInit(GenericSingleChoiceList)
 const long GenericSingleChoiceList::ID_STATICTEXT1 = wxNewId();
@@ -32,11 +38,11 @@ GenericSingleChoiceList::GenericSingleChoiceList(wxWindow* parent,wxWindowID id)
 	Create(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	lblDescr = new wxStaticText(this, ID_STATICTEXT1, _("Description"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-	BoxSizer1->Add(lblDescr, 0, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 8);
+	BoxSizer1->Add(lblDescr, 0, wxALL|wxEXPAND, 8);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, this, _("Please make a selection"));
 	GenericChoiceList = new wxListBox(this, ID_LISTBOX1, wxDefaultPosition, wxSize(232,131), 0, 0, wxLB_SINGLE|wxLB_HSCROLL, wxDefaultValidator, _T("ID_LISTBOX1"));
-	StaticBoxSizer1->Add(GenericChoiceList, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 4);
-	BoxSizer1->Add(StaticBoxSizer1, 1, wxALL|wxEXPAND|wxFIXED_MINSIZE|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 8);
+	StaticBoxSizer1->Add(GenericChoiceList, 1, wxALL|wxEXPAND, 4);
+	BoxSizer1->Add(StaticBoxSizer1, 1, wxALL|wxEXPAND|wxFIXED_MINSIZE, 8);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
@@ -56,5 +62,9 @@ void GenericSingleChoiceList::SetChoices(const wxArrayString& choices, int defCh
     {
         GenericChoiceList->Append(choices[i]);
     }
-    GenericChoiceList->SetSelection(defChoice);
+
+    if (static_cast<size_t>(defChoice) < choices.GetCount())
+        GenericChoiceList->SetSelection(defChoice);
+    else if (choices.GetCount() > 0)
+        GenericChoiceList->SetSelection(0);
 }

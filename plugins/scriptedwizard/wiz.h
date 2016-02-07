@@ -88,13 +88,18 @@ class Wiz : public cbWizardPlugin
         bool IsCheckboxChecked(const wxString& name);
 
         void FillComboboxWithCompilers(const wxString& name);
-        void FillComboListboxWithSelCompilers( const wxString& name, const wxString& validCompilerIDs );
-        void AppendComboListboxWithSelCompilers( const wxString& name, const wxString& validCompilerIDs );
+        void FillContainerWithSelCompilers( const wxString& name, const wxString& validCompilerIDs );
+        void AppendContainerWithSelCompilers( const wxString& name, const wxString& validCompilerIDs );
         wxString GetCompilerFromCombobox(const wxString& name);
+        void FillContainerWithCompilers(const wxString& name, const wxString& compilerID,
+                                        const wxString& validCompilerIDs);
 
         wxString GetComboboxStringSelection(const wxString& name);
         int GetComboboxSelection(const wxString& name);
         void SetComboboxSelection(const wxString& name, int sel);
+
+        void SetComboboxValue(const wxString& name, const wxString& value);
+        wxString GetComboboxValue(const wxString& name);
 
         int GetRadioboxSelection(const wxString& name);
         void SetRadioboxSelection(const wxString& name, int sel);
@@ -158,8 +163,8 @@ class Wiz : public cbWizardPlugin
                                         const wxString& releaseObjOut);
 
         // extender
-        int       FillComboListboxWithChoices( const wxString& name, const wxString& choices );
-        int       AppendComboListboxWithChoices( const wxString& name, const wxString& choices );
+        int       FillContainerWithChoices( const wxString& name, const wxString& choices );
+        int       AppendContainerWithChoices( const wxString& name, const wxString& choices );
         wxString  GetWizardScriptFolder(void);
 
         // pre-defined pages

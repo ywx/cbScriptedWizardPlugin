@@ -6,16 +6,13 @@
 #ifndef PROJECTPATHPANEL_H
 #define PROJECTPATHPANEL_H
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
-//(*Headers(ProjectPathPanel)
+//(*HeadersPCH(ProjectPathPanel)
 #include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/panel.h>
-#include <wx/button.h>
 //*)
 
 #include <wx/string.h>
@@ -68,13 +65,13 @@ class ProjectPathPanel: public wxPanel
         //*)
 
         //(*Declarations(ProjectPathPanel)
-        wxTextCtrl* txtPrjName;
-        wxBoxSizer* BoxSizer2;
         wxTextCtrl* txtPrjTitle;
+        wxTextCtrl* txtPrjPath;
+        wxBoxSizer* BoxSizer2;
         wxBoxSizer* BoxSizer1;
+        wxTextCtrl* txtPrjName;
         wxButton* btnPrjPathBrowse;
         wxTextCtrl* txtFinalDir;
-        wxTextCtrl* txtPrjPath;
         //*)
 
         DECLARE_EVENT_TABLE()

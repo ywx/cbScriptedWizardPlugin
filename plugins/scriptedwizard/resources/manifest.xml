@@ -5,10 +5,11 @@
         <Value title="Scripted wizard" />
         <Value version="0.9" />
         <Value description="A extended generic scripted wizard
-Add Wiz::FillComboListboxWithSelCompilers()
-    Wiz::AppendComboListboxWithSelCompilers()
-    Wiz::FillComboListboxWithChoices()
-    Wiz::AppendComboListboxWithChoices()" />
+Add Wiz::FillContainerWithSelCompilers()
+    Wiz::AppendContainerWithSelCompilers()
+    Wiz::FillContainerWithChoices()
+    Wiz::AppendContainerWithChoices()
+    Wiz::GetWizardScriptFolder()" />
         <Value author="Yiannis An. Mandravellos" />
         <Value authorEmail="info@codeblocks.org" />
         <Value authorWebsite="http://www.codeblocks.org" />
